@@ -1,0 +1,19 @@
+{
+    "name": "Eren Öğrül",
+    "short_name": "Eren Öğrül",
+    "start_url": ".",
+    "description": "Eren Öğrül: Natural Flavors in Privacy, Stoicism, Photography and OpenBSD",
+    "icons":
+    [{
+        "src": "/images/android-chrome-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+    },{
+        "src": "/images/android-chrome-512x512.png",
+        "sizes" :"512x512",
+        "type": "image/png"
+    }],
+    "theme_color": "#d80032",
+    "background_color": "#edf2f4",
+    "display":"standalone"
+}

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Eren Öğrül</title>
+    <meta name="description" content="Eren Öğrül: Natural Flavors in Privacy, Stoicism, Photography and OpenBSD">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#d80032">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/all.css">
+    <link rel="alternate" href="/rss.xml">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+  </head>
+  <body>
+    <div class="header-container-l">
+      <a href="/">EREN ÖĞRÜL</a>
+    </div>
+    <div class="header-container-r">
+      <a href="/projects.html"><i class="fas fa-project-diagram"></i> Projects</a>
+      <a href="/about.html"><i class="fas fa-address-card"></i> About</a>
+      <a href="/themes.html"><i class="fas fa-download"></i> Themes</a>
+      <a href="https://linkedin.com/in/erenogrul"><i class="fab fa-linkedin"></i> Linkedin</a>
+      <a href="https://github.com/eogrul"><i class="fab fa-github-square"></i> Github</a>
+      <a href="https://open.spotify.com/user/seffah?si=tCoxv4DkRAudCx0BHh3dsQ"><i class="fab fa-spotify"></i> Spotify</a>
+    </div>
+    <div class="content">
+<h1 id="OpenBSD%20on%20Dell%20XPS%2013">OpenBSD on Dell XPS 13</h1>
+
+<h4 id="May%2026,%202020">May 26, 2020</h4>
+
+<p><img src="https://www.openbsd.org/art/puffy/ppuf300X272.gif" alt="OpenBSD" /></p>
+
+<p>Yes, <a href="https://openbsd.org">OpenBSD</a> runs on Dell XPS 13 (9343). What happened to my <a href="https://ogrul.org/2020/05/04/my-ideal-setup-os.html">Gentoo build</a>? It is gone now. Sorry Gentoo, it is not personal, and you still have your place in my heart. You might be thinking that I will also update the color schema of ogrul.org, but <em>NOT</em>. For now.</p>
+
+<p>This article is not about how you can install OpenBSD on your laptop but about what you can do after installing it. Trust me, OpenBSD has one of the easiest installers you can ever see. Don&#39;t delete partition i (MSDOS) after deciding to have your partition schema. And, whenever you boot up your freshly installed OpenBSD, please run fw_update and syspatch.</p>
+
+<p>Out of the box on Dell XPS 13 (When I was writing this, I didn&#39;t test bluetooth and camera, and I don&#39;t use both.):</p>
+
+<ul>
+<li>Intel HD Graphics 5500</li>
+<li>Intel Dual Band Wireless AC 7265</li>
+<li>Touchpad</li>
+<li>Realtek RTS5249 Card Reader</li>
+</ul>
+
+<p>are working without any issues. What about the Realtek ALC3263 chipset soundcard? Of course not. Because Dell has a fantastic <a href="https://www.dell.com/community/Laptops-General-Read-Only/XPS-13-2015-9343-sound-card-issues/td-p/4568340">buggy BIOS</a> that causes problems with the detection of the hardware in the boot sequence, and proper codecs are not able to load time to time -even when you choose Thorough in the Fast Boot settings no matter what OS you are using. What I did in OpenBSD:</p>
+
+<ul>
+<li>Update azalia.c and dsdt.c manually</li>
+<li>After the update, compile my kernel</li>
+</ul>
+
+<p>and the soundcard did work. If you have the same laptop, and want to try OpenBSD, follow the simple guide below.</p>
+
+<h2 id="Step%201:%20Downloading%20the%20source%20tree">Step 1: Downloading the source tree</h2>
+
+<pre><code>~$ cd &#47;usr&#47;src
+~$ ftp https:&#47;&#47;cdn.openbsd.org&#47;pub&#47;OpenBSD&#47;6.7&#47;sys.tar.gz
+~$ tar xzf sys.tar.gz
+</code></pre>
+
+<p>After unpacking the source tree, azalia.c and dsdt.c files must be updated. My method is based on <a href="http://openbsd-archive.7691.n7.nabble.com/audio-codec-RealTek-ALC3263-td278384.html">an old mailing list discussion</a>, and the patches were mentioned there. I tried the patches, and they didn&#39;t work. Then, I decided to update both files manually.</p>
+
+<h2 id="Step%202:%20Updating%20azalia.c%20and%20dsdt.c">Step 2: Updating azalia.c and dsdt.c</h2>
+
+<pre><code>~$ cd &#47;usr&#47;src&#47;sys&#47;dev&#47;acpi
+~$ nano dsdt.c
+# Go to line 1469
+{ &#34;_REV&#34;, AML_OBJTYPE_INTEGER, 2, NULL },
+# Change 2 with 5
+{ &#34;_REV&#34;, AML_OBJTYPE_INTEGER, 5, NULL },
+# Save it.
+# After dsdt.c, next stop is azalia.c
+~$ cd ..
+~$ cd pci
+~$ nano azalia.c
+# Go to line 458
+case PCI_PRODUCT_INTEL_BAYTRAIL_HDA:
+# Under it, as a line 459, put below.
+case PCI_PRODUCT_INTEL_CORE5G_HDA_1:
+# Save it.
+</code></pre>
+
+<p>Now, both important files are updated. It is time to build the custom kernel.</p>
+
+<h2 id="Step%203:%20Building%20custom%20kernel">Step 3: Building custom kernel</h2>
+
+<pre><code>~$ cd &#47;usr&#47;src&#47;arch&#47;amd64&#47;conf
+~$ cp GENERIC.MP CUSTOM
+~$ config CUSTOM
+~$ cd ..&#47;compile&#47;CUSTOM&#47;
+~$ make
+~$ make install
+~$ shutdown -p now
+</code></pre>
+
+<p>Cold boot is essential. Otherwise, changes won&#39;t take effect. Finally, it is time to validate the changes. </p>
+
+<h2 id="Step%204:%20It%20works!">Step 4: It works!</h2>
+
+<pre><code>azalia1 at pci0 dev 27 function 0 &#34;Intel 9 Series HD Audio&#34; rev 0x03: msi
+azalia1: codecs: Realtek&#47;0x0288
+audio0 at azalia1
+</code></pre>
+
+<p>There it is. Now, OpenBSD is my daily OS. I had to replace <a href="https://dwm.suckless.org">dwm</a> with <a href="https://github.com/conformal/spectrwm">spectrwm</a> and <a href="https://surf.suckless.org">surf</a> with <a href="https://fanglingsu.github.io/vimb/">vimb</a>. The rest of the applications are the same.</p>
+
+<p>I want to emphasize one more time; the soundcard problem has nothing to do with OpenBSD. I have a <a href="https://www.logitechg.com/en-us/products/gaming-audio/g432-7-1-surround-sound-gaming-headset.981-000769.html">Logitech G432 gaming headset</a> for <a href="https://www.playstation.com/nl-nl/explore/ps4/ps4-pro/">Playstation 4 Pro</a>, and it came with its USB soundcard dongle. Funny enough, I tried it on OpenBSD, and OpenBSD did detect it, and I even listened to music through it. The problem is with the BIOS of Dell XPS 13. I am not sure if it is also the case for newer models, but whatever Dell decided to do, it messed up -OS independent- the soundcard detection.</p>
+
+<p>From now on, I will share my journeys from my OpenBSD installed laptop. In case of any questions, or better suggestions for the soundcard problem of Dell XPS 13 on OpenBSD, feel free to send me an email.</p>
+      </div>
+      <div class="footer">This site operates under a <a href="https://creativecommons.org/share-your-work/public-domain/freeworks" target="_blank" rel="noreferrer">Free Culture License!</a> and it is powered by <a href="https://www.romanzolotarev.com/ssg.html" target="_blank" rel="noreferrer">ssg</a>.
+      </div>
+    </body>
+</html>

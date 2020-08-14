@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
+xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url><loc>https://ogrul.org/index.html</loc><lastmod>2020-08-11</lastmod><priority>1.0</priority></url>
+<url><loc>https://ogrul.org/about.html</loc><lastmod>2020-08-11</lastmod><priority>1.0</priority></url>
+<url><loc>https://ogrul.org/themes.html</loc><lastmod>2020-08-11</lastmod><priority>1.0</priority></url>
+<url><loc>https://ogrul.org/articles/my-ideal-setup-laptop.html</loc><lastmod>2020-08-11</lastmod><priority>1.0</priority></url>
+<url><loc>https://ogrul.org/articles/my-ideal-setup-os.html</loc><lastmod>2020-08-11</lastmod><priority>1.0</priority></url>
+<url><loc>https://ogrul.org/articles/photography-at-its-worst-but-its-mine.html</loc><lastmod>2020-08-11</lastmod><priority>1.0</priority></url>
+<url><loc>https://ogrul.org/articles/openbsd-on-dell-xps-13.html</loc><lastmod>2020-08-11</lastmod><priority>1.0</priority></url>
+<url><loc>https://ogrul.org/articles/death-metal-sleep-therapy.html</loc><lastmod>2020-08-11</lastmod><priority>1.0</priority></url>
+<url><loc>https://ogrul.org/articles/flower-shop-boy.html</loc><lastmod>2020-08-11</lastmod><priority>1.0</priority></url>
+<url><loc>https://ogrul.org/articles/spotify-on-openbsd.html</loc><lastmod>2020-08-11</lastmod><priority>1.0</priority></url>
+<url><loc>https://ogrul.org/articles/social-media-detox.html</loc><lastmod>2020-08-11</lastmod><priority>1.0</priority></url>
+<url><loc>https://ogrul.org/articles/back-then-it-didnt-make-sense.html</loc><lastmod>2020-08-11</lastmod><priority>1.0</priority></url>
+<url><loc>https://ogrul.org/404.html</loc><lastmod>2020-08-11</lastmod><priority>1.0</priority></url>
+<url><loc>https://ogrul.org/projects.html</loc><lastmod>2020-08-11</lastmod><priority>1.0</priority></url>
+<url><loc>https://ogrul.org/themes/</loc><lastmod>2020-08-11</lastmod><priority>1.0</priority></url>
+<url><loc>https://ogrul.org/misc/resume.html</loc><lastmod>2020-08-11</lastmod><priority>1.0</priority></url>
+</urlset>

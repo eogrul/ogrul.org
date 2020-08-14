@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Eren Öğrül</title>
+    <meta name="description" content="Eren Öğrül: Natural Flavors in Privacy, Stoicism, Photography and OpenBSD">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#d80032">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/all.css">
+    <link rel="alternate" href="/rss.xml">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+  </head>
+  <body>
+    <div class="header-container-l">
+      <a href="/">EREN ÖĞRÜL</a>
+    </div>
+    <div class="header-container-r">
+      <a href="/projects.html"><i class="fas fa-project-diagram"></i> Projects</a>
+      <a href="/about.html"><i class="fas fa-address-card"></i> About</a>
+      <a href="/themes.html"><i class="fas fa-download"></i> Themes</a>
+      <a href="https://linkedin.com/in/erenogrul"><i class="fab fa-linkedin"></i> Linkedin</a>
+      <a href="https://github.com/eogrul"><i class="fab fa-github-square"></i> Github</a>
+      <a href="https://open.spotify.com/user/seffah?si=tCoxv4DkRAudCx0BHh3dsQ"><i class="fab fa-spotify"></i> Spotify</a>
+    </div>
+    <div class="content">
+<h1 id="Spotify%20on%20OpenBSD">Spotify on OpenBSD</h1>
+
+<h4 id="July%2007,%202020">July 07, 2020</h4>
+
+<p><img src="/images/ncspot.png" alt="ncspot on OpenBSD" /></p>
+
+<p>Easiest way to have a <a href="https://spotify.com">Spotify</a> client on OpenBSD is to install <a href="https://github.com/hrkfdn/ncspot">ncspot</a> through <a href="https://www.openbsd.org/faq/ports/ports.html">ports</a>. ncspot is an ncurses Spotify client written in <a href="https://rust-lang.org">Rust</a> using librespot. It is heavily inspired by ncurses <a href="https://musicpd.org">MPD</a> clients, such as ncmpc. The motivation of ncspot is to provide a simple and resource friendly alternative to the official client as well as to support platforms that currently don&#39;t have a Spotify client, such as the *BSDs. The only thing you need to consider is that you need a premium subscription of Spotify to use ncspot. </p>
+
+<p>A simple tutorial of installation on OpenBSD is below.</p>
+
+<h2 id="1.%20Ports">1. Ports</h2>
+
+<pre><code>~$ cd &#47;tmp
+~$ ftp https:&#47;&#47;cdn.openbsd.org&#47;pub&#47;OpenBSD&#47;$(uname -r)&#47;{ports.tar.gz,SHA256.sig}
+~$ signify -Cp &#47;etc&#47;signify&#47;openbsd-$(uname -r | cut -c 1,3)-base.pub -x SHA256.sig ports.tar.gz
+~$ cd &#47;usr
+~$ doas tar xzf &#47;tmp&#47;ports.tar.gz
+</code></pre>
+
+<p>Currently, ncspot does not have a pre-compiled binary package, and it requires a manual compilation by the user. Step 1 is basically fetching the ports tree of OpenBSD where ncspot port is available for compilation.</p>
+
+<h2 id="2.%20Configuring%20Ports">2. Configuring Ports</h2>
+
+<pre><code>~$ doas vim &#47;etc&#47;mk.conf
+# Paste below to separate directories that are written to during port building
+WRKOBJDIR=&#47;usr&#47;obj&#47;ports
+DISTDIR=&#47;usr&#47;distfiles
+PACKAGE_REPOSITORY=&#47;usr&#47;packages
+# Write and close the file
+</code></pre>
+
+<p>After configuring the directories, it is ideal to install the binary package of Rust rather than building through the ports. Because, it takes too long, and if there is already a pre-compiled package available, I would install it directly rather than building it through ports.</p>
+
+<h2 id="3.%20Installing%20Rust">3. Installing Rust</h2>
+
+<pre><code>~$ doas pkg_add rust cargo-generate-vendor
+</code></pre>
+
+<p>Now, final step is to install ncspot.</p>
+
+<h2 id="4.%20Installing%20ncspot">4. Installing ncspot</h2>
+
+<pre><code># Searching ncspot on ports tree
+~$ cd &#47;usr&#47;ports
+~$ doas make search key=ncspot
+# If you get an error says &#34;Please install portslist&#34;, install it.
+~$ doas pkg_add portslist
+# The output of the search:
+# Port:   ncspot-0.1.3
+# Path:   audio&#47;ncspot
+# Info:   ncurses Spotify client
+# Maint:  Henrik Friedrichsen &#60;henrik@diff.cc&#62;
+# Index:  audio lang&#47;rust
+# L-deps: audio&#47;portaudio-svn
+# B-deps: STEM-&#62;=1.30:lang&#47;rust devel&#47;cargo-generate-vendor lang&#47;rust
+# R-deps: 
+# Archs:  any
+~$ cd audio&#47;ncspot
+~$ doas make install
+</code></pre>
+
+<p>It will take some time to compile and install it. After the installation is completed, please run ncspot and login to Spotify. And enjoy!</p>
+
+<p>It is really easy to use and navigate through menus on ncspot. F2 is to search anything you want on Spotify, and F1 is the queue of the music you want to listen. You have to like albums on Spotify to make them available on the Albums menu. Otherwise, it will show it empty.</p>
+
+<p>PS: I don&#39;t have <a href="https://music.google.com">Google Music</a>, <a href="https://tidal.com">Tidal</a> or any other subscriptions other than Spotify, and I didn&#39;t try cargo package of ncspot or python packages for other Spotify clients such as <a href="https://mopidy.com">mopidy</a>, <a href="https://tizonia.org">tizonia</a>, etc. </p>
+      </div>
+      <div class="footer">This site operates under a <a href="https://creativecommons.org/share-your-work/public-domain/freeworks" target="_blank" rel="noreferrer">Free Culture License!</a> and it is powered by <a href="https://www.romanzolotarev.com/ssg.html" target="_blank" rel="noreferrer">ssg</a>.
+      </div>
+    </body>
+</html>
