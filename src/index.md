@@ -6,6 +6,7 @@ All of the ideas in here are free to share, improve, and execute. If you would l
 
 # New Articles
 
+* [Be Like An Octopus][10]
 * [Back Then, It Didn't Make Sense][9]
 * [Spotify on OpenBSD][8]
 * [Flower Shop Boy][7]
@@ -25,3 +26,4 @@ All of the ideas in here are free to share, improve, and execute. If you would l
 [7]: https://ogrul.org/articles/flower-shop-boy.html
 [8]: https://ogrul.org/articles/spotify-on-openbsd.html
 [9]: https://ogrul.org/articles/back-then-it-didnt-make-sense.html
+[10]: https://ogrul.org/articles/be-like-an-octopus.html
